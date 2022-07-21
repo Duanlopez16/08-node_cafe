@@ -1,6 +1,8 @@
 import { response } from "express";
 import bcrypt from 'bcryptjs';
+import { validationResult } from "express-validator";
 import Usuario from '../models/Usuario.js';
+
 
 const get_usuarios = (req, res = response) => {
     const params = req.query;
@@ -14,20 +16,30 @@ const get_usuarios = (req, res = response) => {
 const post_usuarios = async(req, res = response) => {
 
     try {
+
         const { nombre, correo, password, rol } = req.body;
         const usuario = new Usuario({ nombre, correo, password, rol });
 
-        //Encriptacion de password
-        const salt = bcrypt.genSaltSync();
-        usuario.password = bcrypt.hashSync(typeof(password), salt);
+        const usuario_correo = await Usuario.findOne({ correo });
+        if (!usuario_correo) {
+            //Encriptacion de password
+            const salt = bcrypt.genSaltSync();
+            usuario.password = bcrypt.hashSync(typeof(password), salt);
 
 
-        await usuario.save();
-        res.json({
-            status: 'success',
-            message: 'add usuario',
-            usuario
-        });
+            await usuario.save();
+            res.json({
+                status: 'success',
+                message: 'add usuario',
+                data: usuario._id
+            });
+        } else {
+            res.status(400).json({
+                status: 'error',
+                message: ' El correo ingresado ya existe.',
+                data: correo
+            });
+        }
 
     } catch (error) {
         console.log(error);
