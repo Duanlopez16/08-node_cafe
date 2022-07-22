@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { router } from "../routes/user.js";
+import { router_rol } from "../routes/rol.js";
 import { db_connetion } from "../database/config.js";
 
 class Server {
@@ -9,6 +10,7 @@ class Server {
         this.app = express();
         this.port = process.env.PORT;
         this.user_path = '/api/user';
+        this.rol_path = '/api/rol';
         //base de datos
         this.connetion_db();
         //middewares
@@ -23,6 +25,7 @@ class Server {
 
     routes() {
         this.app.use(this.user_path, router);
+        this.app.use(this.rol_path, router_rol);
     }
 
     middewares() {

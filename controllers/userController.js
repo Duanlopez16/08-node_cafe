@@ -1,6 +1,5 @@
 import { response } from "express";
 import bcrypt from 'bcryptjs';
-import { validationResult } from "express-validator";
 import Usuario from '../models/Usuario.js';
 
 
