@@ -21,7 +21,6 @@ const UsuarioSchema = mongoose.Schema({
     rol: {
         type: String,
         required: [true, 'rol es requerido'],
-        enum: ['Admin', 'User']
     },
     estado: {
         type: Boolean,
@@ -32,5 +31,12 @@ const UsuarioSchema = mongoose.Schema({
         default: false
     }
 });
+
+
+UsuarioSchema.methods.toJSON = function() {
+    const { __v, password, ...usuario } = this.toObject();
+
+    return usuario
+}
 
 export default mongoose.model('Usuario', UsuarioSchema);

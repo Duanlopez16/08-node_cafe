@@ -30,7 +30,7 @@ const post_usuarios = async(req, res = response) => {
             res.json({
                 status: 'success',
                 message: 'add usuario',
-                data: usuario._id
+                data: usuario
             });
         } else {
             res.status(400).json({
