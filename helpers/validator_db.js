@@ -1,5 +1,6 @@
 import Rol from "../models/Rol.js"
 import Usuario from "../models/Usuario.js";
+import mongoose from "mongoose";
 
 const validar_rol = async(rol) => {
     const doc_rol = await Rol.findOne({ 'nombre': rol });
@@ -15,5 +16,16 @@ const validar_email = async(correo) => {
     }
 }
 
+const validar_usuario_id = async(id) => {
+    const usuario_doc = await Usuario.findById(id);
+    if (!usuario_doc) {
+        throw new Error('No se encontro registrado un usuario con el id ingresado.');
+    }
+}
 
-export { validar_rol, validar_email }
+const validar_id = (id) => {
+
+}
+
+
+export { validar_rol, validar_email, validar_usuario_id }

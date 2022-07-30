@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import {
     delete_usuario,
     get_usuarios,
     post_usuarios,
     put_usuarios
 } from "../controllers/UserController.js";
-import { validar_email, validar_rol } from "../helpers/validator_db.js";
+import { validar_email, validar_rol, validar_usuario_id } from "../helpers/validator_db.js";
 import { validar_campos } from "../middelwares/validar-campos.js";
 
 const router = Router();
@@ -25,7 +25,13 @@ router.post('/', [
     validar_campos
 ], post_usuarios);
 
-router.put('/:id', put_usuarios);
+router.put('/:id', [
+    param('id', 'El id ingresado no es valido').isMongoId(),
+    param('id').custom(validar_usuario_id),
+    body('rol', 'El rol es requerido.').notEmpty(),
+    body('rol').custom(validar_rol),
+    validar_campos
+], put_usuarios);
 
 router.delete('/', delete_usuario);
 

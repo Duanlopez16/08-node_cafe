@@ -36,13 +36,34 @@ const post_usuarios = async(req, res = response) => {
     }
 }
 
-const put_usuarios = (req, res = response) => {
+const put_usuarios = async(req, res = response) => {
     const id = req.params.id;
-    res.json({
-        status: 'success',
-        message: 'put usuario',
-        id
-    });
+
+    const { _id, password, google, correo, ...usuario } = req.body;
+    const usuario_doc = await Usuario.findOne({ id, estado: true });
+
+    if (usuario_doc) {
+
+        if (password) {
+            const salt = bcrypt.genSaltSync();
+            usuario.password = bcrypt.hashSync(typeof(password), salt);
+        }
+
+        const usuario_update = await Usuario.findByIdAndUpdate(id, usuario);
+
+        res.json({
+            status: 'success',
+            message: 'usuario editado correctamente',
+            data: usuario_update
+        });
+
+    } else {
+        res.json({
+            status: 'error',
+            message: 'El usuario ingresado no se encuentra registrado.',
+            data: []
+        });
+    }
 }
 
 const delete_usuario = (req, res = response) => {
