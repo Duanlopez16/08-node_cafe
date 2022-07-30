@@ -6,7 +6,7 @@ import {
     post_usuarios,
     put_usuarios
 } from "../controllers/UserController.js";
-import { validar_rol } from "../helpers/validator_db.js";
+import { validar_email, validar_rol } from "../helpers/validator_db.js";
 import { validar_campos } from "../middelwares/validar-campos.js";
 
 const router = Router();
@@ -17,6 +17,7 @@ router.post('/', [
     body('nombre', 'El nombre  es requerido.').notEmpty(),
     body('correo', 'El correo es requerido.').notEmpty(),
     body('correo', 'El correo no es valido.').isEmail(),
+    body('correo').custom(validar_email),
     body('password', 'El password es requerido.').notEmpty(),
     body('password', 'Password debe ser de minimo 6 caracteres').isLength({ min: 6 }),
     body('rol', 'El rol es requerido.').notEmpty(),

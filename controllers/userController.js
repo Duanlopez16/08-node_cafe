@@ -19,26 +19,17 @@ const post_usuarios = async(req, res = response) => {
         const { nombre, correo, password, rol } = req.body;
         const usuario = new Usuario({ nombre, correo, password, rol });
 
-        const usuario_correo = await Usuario.findOne({ correo });
-        if (!usuario_correo) {
-            //Encriptacion de password
-            const salt = bcrypt.genSaltSync();
-            usuario.password = bcrypt.hashSync(typeof(password), salt);
+        //Encriptacion de password
+        const salt = bcrypt.genSaltSync();
+        usuario.password = bcrypt.hashSync(typeof(password), salt);
 
 
-            await usuario.save();
-            res.json({
-                status: 'success',
-                message: 'add usuario',
-                data: usuario
-            });
-        } else {
-            res.status(400).json({
-                status: 'error',
-                message: ' El correo ingresado ya existe.',
-                data: correo
-            });
-        }
+        await usuario.save();
+        res.json({
+            status: 'success',
+            message: 'add usuario',
+            data: usuario
+        });
 
     } catch (error) {
         console.log(error);
