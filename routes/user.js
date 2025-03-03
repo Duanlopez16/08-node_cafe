@@ -5,13 +5,13 @@ import {
     get_usuarios,
     post_usuarios,
     put_usuarios
-} from "../controllers/UserController.js";
+} from "../controllers/userController.js";
 import { validar_email, validar_rol, validar_usuario_id } from "../helpers/validator_db.js";
 import { validar_campos } from "../middelwares/validar-campos.js";
 
 const router = Router();
 
-router.get('/', get_usuarios);
+router.get('/:id', get_usuarios);
 
 router.post('/', [
     body('nombre', 'El nombre  es requerido.').notEmpty(),

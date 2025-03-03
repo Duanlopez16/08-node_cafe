@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { router } from "../routes/user.js";
 import { router_rol } from "../routes/rol.js";
+import { router_auth } from "../routes/auth.js";
 import { db_connetion } from "../database/config.js";
 
 class Server {
@@ -11,6 +12,7 @@ class Server {
         this.port = process.env.PORT;
         this.user_path = '/api/user';
         this.rol_path = '/api/rol';
+        this.auth_path = '/api/auth';
         //base de datos
         this.connetion_db();
         //middewares
@@ -24,6 +26,7 @@ class Server {
     }
 
     routes() {
+        this.app.use(this.auth_path, router_auth);
         this.app.use(this.user_path, router);
         this.app.use(this.rol_path, router_rol);
     }

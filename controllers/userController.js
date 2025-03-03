@@ -3,13 +3,31 @@ import bcrypt from 'bcryptjs';
 import Usuario from '../models/Usuario.js';
 
 
-const get_usuarios = (req, res = response) => {
-    const params = req.query;
-    res.json({
-        status: 'success',
-        message: 'get Api',
-        params
-    });
+const get_usuarios = async(req, res = response) => {
+    const id = req.params.id;
+
+    if (id) {
+        const usuario_doc = await Usuario.findOne({ id, estado: true });
+        if (usuario_doc) {
+            res.json({
+                status: 'success',
+                message: 'get Api',
+                data: usuario_doc
+            });
+        } else {
+            res.json({
+                status: 'error',
+                message: 'User not found',
+                data: []
+            });
+        }
+    } else {
+        res.json({
+            status: 'error',
+            message: 'get Api',
+            data: []
+        });
+    }
 }
 
 const post_usuarios = async(req, res = response) => {
@@ -21,7 +39,7 @@ const post_usuarios = async(req, res = response) => {
 
         //Encriptacion de password
         const salt = bcrypt.genSaltSync();
-        usuario.password = bcrypt.hashSync(typeof(password), salt);
+        usuario.password = bcrypt.hashSync(password, salt);
 
 
         await usuario.save();
